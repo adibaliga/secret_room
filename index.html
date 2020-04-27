@@ -1,55 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adithya's Personal site</title>
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epitas Conference Room</title>
+<style>
+      video {
+                -moz-transition: all 1s ease;
+                -ms-transition: all 1s ease;
+                -o-transition: all 1s ease;
+                -webkit-transition: all 1s ease;
+                transition: all 1s ease;
+                margin-top: 40px;
+                vertical-align: middle;
+                width: 67%;
+               height: 500px;
+            }
+            audio{
+                margin-top: 10px;
+            }
+            .heading{
+             margin-top: 0px;
+            margin-left:38%;
+            }  
+            .heading2{
+             margin-top: 25px;
+            margin-left:33%;
+            }  
+            .text-box{
+                width: 200px;
+                height: 20px;
+            }
+            .room{
+                background-color: green;
+                width: 160px;
+                height:30px;
+                font-size: medium;
+                text-decoration-color: honeydew;
+            }
+            .h2{color: indigo;font-size: large;}
+  
+      .column-left{
+      background-color: rgb(219, 228, 231);
+      height: 400px;
+      width: 300px;;
+    margin-top: 50px;
+    float: left;
+   }
+.column-center{
+    width: 350px;
+    margin-top: 50px;
+    position: relative;
+}
+.column-right{
+    background-color: rgb(219, 228, 231);
+    height: 400px;
+    width: 130px;
+    font-size: 30px;
+    padding-top: 10px;
+    text-align: center;
+    margin-top: 50px;
+    float: right;
+}
+.column-left4,.column-left3,.column-left2,.column-left1
+{
+    width: 90px;
+    height: 100px;
+    background-color: lightcoral;
+}
+</style>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
 </head>
 <body>
-  <table cellspacing="20">
-    <tr><td><img src="circle-cropped.png" alt="adithyas baliga" height="100" width="100"></td>
-      <td><h1>Adithya Baliga B</h1>
-        <p><em>Innovation Engineer of <strong><a href="http://epitas.in" target="_blank">Epitas Software</a></strong></em></p>
-        <p>I'm a beginner to become full stack web developer</p></td></tr>
-  </table>
-  <hr>
-  <h3>Education</h3>
-  <ul>
-    <li>Canara Engineering College</li>
-    <li>Canara PU College</li>
-    <li>Nalanda High School</li>
-  </ul><hr>
-  <h3>Work Experience</h3>
-  <table border="1px" cellspacing="10">
-    <thead>
-      <tr>
-        <th>Year</th><th>Experience</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>2019-2020</td><td>Innovation Engineer</td></tr>
-      <tr><td>2018-2019</td><td>Neem Trainee</td></tr>
-     <tr><td>2017-2018</td><td>Graduate Apprentice Trainee</td></tr>
-    </tbody>
-  </table>
-  <hr>
-  <a href="hobbies.html" target="_blank">My Hobbies</a>
-  <a href="contacts.html" target="_blank">Contact Me</a>
-  <hr>
-  <h3>Skills</h3>
-  <table cellspaing="10">
-    <tr>
-      <td>
-        <tr><td>HTML5</td><td>⭐⭐⭐⭐⭐</td><td>CSS</td><td>⭐⭐⭐⭐⭐</td></tr>
-      
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <tr><td>JS</td><td>⭐⭐⭐⭐⭐</td><td>Node JS</td><td>⭐⭐⭐⭐⭐</td></tr>
+    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+<script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+<img src="epitas-logo.png"/>
+<div class="heading"><h2>JOIN CONFERENCE MEETING</h2></div>
+<div class="heading2"><input type="text" class="text-box" id="room-id" value="epitas" autocorrect=off autocapitalize=off size=20>
+<button id="btn-open-room" class="room">Open Room</button>
+<button id="btn-join-room"class="room">Join Room</button></div></div>
+<div class="row">
+    <center>
+<div class="column-left" >
+    <div class="column-left1">Attendees<img src="attendes.png" width="92px"height="90px"></div><hr>
+    <div class="Room Ownner" id="colum"></div><hr>
+    <div class="Members joined" id="add"></div>
+</div></center>
+<div class="column-center"><div id="audios-container"></div>
+<div id="videos-container"></div></div>
+
+<script>
+var connection = new RTCMultiConnection();
+
+// this line is VERY_important
+connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+
+// all below lines are optional; however recommended.
+
+connection.session = {
+    audio: true,
+    video:true,
+    screen:true,
+ mandatory:{oneway:true}
+};
+connection.mediaConstraints = {
+    audio: true,
+    video: false
+};
+
+
+connection.sdpConstraints.mandatory = {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: false
+};
+
+connection.onstream = function(event) {
     
-      </td>
-    </tr>
-  </table>
+    document.body.appendChild( event.mediaElement );
+};
+
+
+
+document.getElementById('btn-open-room').onclick = function() {
+ 
+
+  var txt;
+  var person = prompt("Please enter your name:", "your name");
+  if (person == null || person == "") {
+    alert("Refresh the page to enter your name");
+  } else {
+    alert("Hello " + person + "! Thank you for Opening room "+ document.getElementById("room-id").value);
+    this.disabled = true;
+    document.getElementById('room-id').disabled=true;
+    document.getElementById('btn-join-room').disabled=true;
+    connection.open( "room-id");
+    
+    var div = document.getElementById('colum');
+    div.innerHTML += person;
+    
+  }
+ 
+   /* this.disabled = true;
+    document.getElementById('room-id').disabled=true;
+    document.getElementById('btn-join-room').disabled=true;
+    connection.open( "room-id");*/
+};
+
+document.getElementById('btn-join-room').onclick = function() {
+
+    var txt;
+  var person = prompt("Please enter your name:", "Your name");
+  if (person == null || person == "") {
+    alert("Refresh the page to enter your name");
+  } else {
+    alert("Hello " + person + "! Thank you for joining room "+ document.getElementById("room-id").value);
+    this.disabled = true;
+    document.getElementById('room-id').disabled=true;
+    document.getElementById('btn-join-room').disabled=true;
+    connection.open( "room-id");
+    
+    var div = document.getElementById('add');
+    div.innerHTML += person;
+    
+  }
+
+    this.disabled = true;
+    document.getElementById('room-id').disabled=true;
+    document.getElementById('btn-open-room').disabled=true;
+    connection.join( "room-id" );
+};
+
+
+</script>
 </body>
-</html>     
+
+</html>
