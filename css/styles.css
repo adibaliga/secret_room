@@ -1,10 +1,7 @@
 video {
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
     -webkit-transition: all 1s ease;
     transition: all 1s ease;
-    margin-top: 40px;
+    margin-top: 0px;
     vertical-align: middle;
     width: 67%;
    height: 500px;
@@ -25,7 +22,7 @@ margin-left:33%;
     height: 20px;
 }
 .room{
-    background-color: #d4f8e8;
+    background-color: #4cbbb9;
     width: 160px;
     height:30px;
     font-size: medium;
@@ -37,7 +34,7 @@ margin-left:33%;
 background-color: rgb(219, 228, 231);
 height: 400px;
 width: 300px;;
-margin-top: 50px;
+margin-top: 10px;
 float: left;
 }
 .column-center{
