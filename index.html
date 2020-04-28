@@ -4,93 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epitas Conference Room</title>
-<style>
-      video {
-                -moz-transition: all 1s ease;
-                -ms-transition: all 1s ease;
-                -o-transition: all 1s ease;
-                -webkit-transition: all 1s ease;
-                transition: all 1s ease;
-                margin-top: 40px;
-                vertical-align: middle;
-                width: 67%;
-               height: 500px;
-            }
-            audio{
-                margin-top: 10px;
-            }
-            .heading{
-             margin-top: 0px;
-            margin-left:38%;
-            }  
-            .heading2{
-             margin-top: 25px;
-            margin-left:33%;
-            }  
-            .text-box{
-                width: 200px;
-                height: 20px;
-            }
-            .room{
-                background-color: green;
-                width: 160px;
-                height:30px;
-                font-size: medium;
-                text-decoration-color: honeydew;
-            }
-            .h2{color: indigo;font-size: large;}
-  
-      .column-left{
-      background-color: rgb(219, 228, 231);
-      height: 400px;
-      width: 300px;;
-    margin-top: 50px;
-    float: left;
-   }
-.column-center{
-    width: 350px;
-    margin-top: 50px;
-    position: relative;
-}
-.column-right{
-    background-color: rgb(219, 228, 231);
-    height: 400px;
-    width: 130px;
-    font-size: 30px;
-    padding-top: 10px;
-    text-align: center;
-    margin-top: 50px;
-    float: right;
-}
-.column-left4,.column-left3,.column-left2,.column-left1
-{
-    width: 90px;
-    height: 100px;
-    background-color: lightcoral;
-}
-</style>
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+<link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="image/favicon-16x16.png">
 <link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
 <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
-<img src="epitas-logo.png"/>
+<!--Pop Up images-->
+    <!-- let's call the following div as the POPUP FRAME -->
+    <div id="popup" class="popup panel panel-primary">
+        
+        <!-- and here comes the image -->
+        <img src="image/conf.png" alt="popup">
+            
+            <!-- Now this is the button which closes the popup-->
+        <div class="panel-footer">
+            <button id="close" class="myButton">Close button</button>
+        </div>
+            
+            <!-- and finally we close the POPUP FRAME-->
+            <!-- everything on it will show up within the popup so you can add more things not just an image -->
+    </div>
+<!--Pop Up images-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!--Pop up scrript-->
+<script>
+   $(document).ready(function () {
+    //select the POPUP FRAME and show it
+    $("#popup").hide().fadeIn(2500);
+
+    //close the POPUP if the button with id="close" is clicked
+    $("#close").on("click", function (e) {
+        e.preventDefault();
+        $("#popup").fadeOut(1000);
+    });
+});
+    </script>
+    <!--Pop up scrript-->
+
+<img src="image/epitas-logo.png"/>
 <div class="heading"><h2>JOIN CONFERENCE MEETING</h2></div>
 <div class="heading2"><input type="text" class="text-box" id="room-id" value="epitas" autocorrect=off autocapitalize=off size=20>
 <button id="btn-open-room" class="room">Open Room</button>
-<button id="btn-join-room"class="room">Join Room</button></div></div>
+<button id="btn-join-room"class="room">Join Room</button>
+<button id="btn-exit-room"class="room">Exit</button></div></div>
 <div class="row">
     <center>
 <div class="column-left" >
-    <div class="column-left1">Attendees<img src="attendes.png" width="92px"height="90px"></div><hr>
-    <div class="Room Ownner" id="colum"></div><hr>
-    <div class="Members joined" id="add"></div>
+    <div class="column-left1">Info<img src="https://upload.wikimedia.org/wikipedia/en/5/54/Information.png" width="92px"height="90px">
+        <!--<img src="image/attendes.png" width="92px"height="90px">--></div><hr>
+        <p>
+            
+                
+                    <strong><u>Create ROOM</u></strong>
+                    <p>One can create Conference room for screen and audio sharing
+                    by clicking <strong>Open Room</strong> and choose your screen to share
+                    and click for Mic to use for audio conference</p>
+                    <strong><u>Join ROOM</u></strong>
+                    <p>One can join Conference room for screen and audio sharing
+                    by clicking <strong>Join Room</strong> and select Mic for audio 
+                conference</p>
+                <strong>For joining room,Cancel screen share if you just wanted to see creators screen</strong>
+            
+        </p>
 </div></center>
 <div class="column-center"><div id="audios-container"></div>
 <div id="videos-container"></div></div>
+
 
 <script>
 var connection = new RTCMultiConnection();
@@ -127,53 +111,43 @@ connection.onstream = function(event) {
 document.getElementById('btn-open-room').onclick = function() {
  
 
-  var txt;
-  var person = prompt("Please enter your name:", "your name");
-  if (person == null || person == "") {
-    alert("Refresh the page to enter your name");
-  } else {
-    alert("Hello " + person + "! Thank you for Opening room "+ document.getElementById("room-id").value);
-    this.disabled = true;
+   this.disabled = true;
     document.getElementById('room-id').disabled=true;
     document.getElementById('btn-join-room').disabled=true;
     connection.open( "room-id");
     
-    var div = document.getElementById('colum');
-    div.innerHTML += person;
-    
-  }
- 
-   /* this.disabled = true;
-    document.getElementById('room-id').disabled=true;
-    document.getElementById('btn-join-room').disabled=true;
-    connection.open( "room-id");*/
 };
 
 document.getElementById('btn-join-room').onclick = function() {
 
-    var txt;
-  var person = prompt("Please enter your name:", "Your name");
-  if (person == null || person == "") {
-    alert("Refresh the page to enter your name");
-  } else {
-    alert("Hello " + person + "! Thank you for joining room "+ document.getElementById("room-id").value);
-    this.disabled = true;
-    document.getElementById('room-id').disabled=true;
-    document.getElementById('btn-join-room').disabled=true;
-    connection.open( "room-id");
-    
-    var div = document.getElementById('add');
-    div.innerHTML += person;
-    
-  }
 
     this.disabled = true;
     document.getElementById('room-id').disabled=true;
     document.getElementById('btn-open-room').disabled=true;
+   
+    connection.sdpConstraints.mandatory = {
+        OfferToReceiveAudio: false,
+        OfferToReceiveVideo: true
+    };
     connection.join( "room-id" );
 };
 
+document.getElementById('btn-exit-room').onclick=function(){
+    connection.getAllParticipants().forEach(function(pid) {
+        connection.disconnectWith(pid);
+    });
 
+    // stop all local cameras
+    connection.attachStreams.forEach(function(localStream) {
+        localStream.stop();
+    });
+
+    // close socket.io connection
+    connection.closeSocket();
+
+    //reload
+    location.reload();
+};
 </script>
 </body>
 
