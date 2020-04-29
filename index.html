@@ -25,7 +25,7 @@
             
             <!-- Now this is the button which closes the popup-->
         <div class="panel-footer">
-            <button id="close" class="myButton">Close</button>
+            <button id="close" class="myButton">Close button</button>
         </div>
             
             <!-- and finally we close the POPUP FRAME-->
@@ -159,11 +159,9 @@ document.getElementById('btn-exit-room').onclick=function(){
     // close socket.io connection
     connection.closeSocket();
 
-    //reload
-    if(connection.closeSocket()==true){
-    document.getElementById('btn-open-room').disabled=false;
-    document.getElementById('btn-join-room').disabled=false;
-    }
+    document.getElementById("btn-open-room").disabled = false;
+    document.getElementById("btn-join-room").disabled = false;
+    document.getElementById("room-id").disabled = false;
 };
 
 
