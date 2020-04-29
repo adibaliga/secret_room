@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epitas Conference Room</title>
-
+    <meta name="keywords" content="epitas conference room">
+    <meta name="description" content="Conference room to share screen and audio with others">
 <link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="image/favicon-16x16.png">
@@ -12,7 +13,8 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+    <script src="RTCMulticonnection.min.js"></script>
+   <!-- <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>-->
 <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
 <!--Pop Up images-->
     <!-- let's call the following div as the POPUP FRAME -->
@@ -81,9 +83,11 @@
 var connection = new RTCMultiConnection();
 
 // this line is VERY_important
+
 connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 
 // all below lines are optional; however recommended.
+
 
 connection.session = {
     audio: true,
@@ -98,7 +102,7 @@ connection.mediaConstraints = {
 
 
 connection.sdpConstraints.mandatory = {
-    OfferToReceiveAudio: true,
+    OfferToReceiveAudio: false,
     OfferToReceiveVideo: false
 };
 
@@ -117,7 +121,7 @@ else{
    this.disabled = true;
     document.getElementById('room-id').disabled=true;
     document.getElementById('btn-join-room').disabled=true;
-    connection.open( "room-id");
+    connection.open( document.getElementById('room-id').value);
 }
 };
 
@@ -128,21 +132,17 @@ document.getElementById('btn-join-room').onclick = function() {
 else{
 
     this.disabled = true;
-    document.getElementById('room-id').disabled=true;
-    document.getElementById('btn-open-room').disabled=true;
-   
+    connection.session={
+        audio:true,
+        video:false
+    };
     connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: false,
-        OfferToReceiveVideo: true
+        OfferToReceiveVideo: false
     };
-    connection.join('room-id', function(isJoined, roomid, error) {
-    if(isJoined === false) {
-        alert(error); // maybe room doesn't exist or room is full or password is invalid
-    }
-    else {
-        alert('Successfully joined the room.');
-    }
-});
+    document.getElementById('room-id').disabled=true;
+    document.getElementById('btn-open-room').disabled=true;
+    connection.join(document.getElementById('room-id').value);
 }
 };
 
@@ -160,7 +160,10 @@ document.getElementById('btn-exit-room').onclick=function(){
     connection.closeSocket();
 
     //reload
-    location.reload();
+    if(connection.closeSocket()==true){
+    document.getElementById('btn-open-room').disabled=false;
+    document.getElementById('btn-join-room').disabled=false;
+    }
 };
 
 
