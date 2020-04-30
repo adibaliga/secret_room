@@ -13,8 +13,8 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <script src="RTCMulticonnection.min.js"></script>
-   <!-- <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>-->
+     <!-- <script src="RTCMulticonnection.min.js"></script>-->
+   <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
 <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
 <!--Pop Up images-->
     <!-- let's call the following div as the POPUP FRAME -->
@@ -25,7 +25,7 @@
             
             <!-- Now this is the button which closes the popup-->
         <div class="panel-footer">
-            <button id="close" class="myButton">Close button</button>
+            <button id="close" class="myButton">Close</button>
         </div>
             
             <!-- and finally we close the POPUP FRAME-->
@@ -37,7 +37,7 @@
 <script>
    $(document).ready(function () {
     //select the POPUP FRAME and show it
-    $("#popup").hide().fadeIn(2500);
+    $("#popup").hide().fadeIn(2000);
 
     //close the POPUP if the button with id="close" is clicked
     $("#close").on("click", function (e) {
@@ -77,7 +77,7 @@
 </div></center>
 <div class="column-center"><div id="audios-container"></div>
 <div id="videos-container"></div></div>
-
+<div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 20px 0px 0px 300px;border: 1px solid rgb(189, 189, 189); border-left: 0;border-right: 0;"></div>
 
 <script>
 var connection = new RTCMultiConnection();
@@ -93,6 +93,7 @@ connection.session = {
     audio: true,
     video:true,
     screen:true,
+    
  mandatory:{oneway:true}
 };
 connection.mediaConstraints = {
@@ -112,7 +113,6 @@ connection.onstream = function(event) {
 };
 
 
-
 document.getElementById('btn-open-room').onclick = function() {
 if (document.getElementById('room-id').value===""){
     alert("Enter Room name");
@@ -122,6 +122,7 @@ else{
     document.getElementById('room-id').disabled=true;
     document.getElementById('btn-join-room').disabled=true;
     connection.open( document.getElementById('room-id').value);
+    showRoomURL(connection.sessionid);
 }
 };
 
@@ -142,6 +143,7 @@ else{
     };
     document.getElementById('room-id').disabled=true;
     document.getElementById('btn-open-room').disabled=true;
+
     connection.join(document.getElementById('room-id').value);
 }
 };
@@ -162,8 +164,8 @@ document.getElementById('btn-exit-room').onclick=function(){
     document.getElementById("btn-open-room").disabled = false;
     document.getElementById("btn-join-room").disabled = false;
     document.getElementById("room-id").disabled = false;
+    document.getElementById("room-urls").siabled=false;
 };
-
 
 </script>
 </body>
